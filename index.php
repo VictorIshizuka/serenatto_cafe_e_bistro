@@ -1,14 +1,12 @@
 <?php
 
 require "src/conexao-bd.php";
+require "src/Model/Produto.php";
+require "src/Repository/ProdutoRepository.php";
 
-$sql1 = "SELECT * FROM produtos WHERE tipo = 'Café'";
-$statement = $pdo->query($sql1);
-$produtosCafe = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-$sql2 = "SELECT * FROM produtos WHERE tipo = 'Almoço'";
-$statement = $pdo->query($sql2);
-$produtosAlmoco = $statement->fetchAll(PDO::FETCH_ASSOC);
+$produtoRepository = new ProdutoRepository($pdo);
+$dadosCafe = $produtoRepository->opcoesCafe();
+$dadosAlmoco = $produtoRepository->opcoesAlmoco();
 
 ?>
 
@@ -44,40 +42,16 @@ $produtosAlmoco = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <img class="ornaments" src="img/ornaments-coffee.png" alt="ornaments">
             </div>
             <div class="container-cafe-manha-produtos">
-                <?php foreach ($produtosCafe as $data): ?>
+                <?php foreach ($dadosCafe as $data): ?>
                     <div class="container-produto">
                         <div class="container-foto">
-                            <img src="<?= "img/" . $data['imagem'] ?>">
+                            <img src="<?= $data->getImagemDiretorio() ?>">
                         </div>
-                        <p><?= $data['nome'] ?></p>
-                        <p><?= $data['descricao'] ?></p>
-                        <p> <?= "R$ " . $data['preco'] ?></p>
+                        <p><?= $data->getNome() ?></p>
+                        <p><?= $data->getDescricao() ?></p>
+                        <p><?= $data->precoFormatted() ?></p>
                     </div>
                 <?php endforeach; ?>
-                <!-- <div class="container-produto">
-                    <div class="container-foto">
-                        <img src="img/cafe-com-leite.jpg">
-                    </div>
-                    <p>Café com Leite</p>
-                    <p>A harmonia perfeita do café e do leite, uma experiência reconfortante</p>
-                    <p>R$ 2.00</p>
-                </div>
-                <div class="container-produto">
-                    <div class="container-foto">
-                        <img src="img/cappuccino.jpg">
-                    </div>
-                    <p>Cappuccino</p>
-                    <p>Café suave, leite cremoso e uma pitada de sabor adocicado</p>
-                    <p>R$ 7.00</p>
-                </div>
-                <div class="container-produto">
-                    <div class="container-foto">
-                        <img src="img/cafe-gelado.jpg">
-                    </div>
-                    <p>Café Gelado</p>
-                    <p>Café gelado refrescante, adoçado e com notas sutis de baunilha ou caramelo.</p>
-                    <p>R$ 3.00</p>
-                </div> -->
             </div>
         </section>
         <section class="container-almoco">
@@ -86,14 +60,14 @@ $produtosAlmoco = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <img class="ornaments" src="img/ornaments-coffee.png" alt="ornaments">
             </div>
             <div class="container-almoco-produtos">
-                <?php foreach ($produtosAlmoco as $data) : ?>
+                <?php foreach ($dadosAlmoco as $data) : ?>
                     <div class="container-produto">
                         <div class="container-foto">
-                            <img src="<?= "img/" . $data['imagem'] ?>"> 
+                            <img src="<?= $data->getImagemDiretorio() ?>">
                         </div>
-                        <p><?= $data['nome'] ?></p>
-                        <p><?= $data['descricao'] ?></p>
-                        <p> <?= "R$ " . $data['preco'] ?></p>
+                        <p><?= $data->getNome() ?></p>
+                        <p><?= $data->getDescricao() ?></p>
+                        <p><?= $data->precoFormatted() ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
