@@ -1,3 +1,32 @@
+<?php
+require "src/conexao-bd.php";
+require "src/Model/Produto.php";
+require "src/Repository/ProdutoRepository.php";
+
+
+$repository = new ProdutoRepository($pdo);
+
+  $dado = $repository->buscarApenasUm($_GET['id']);
+
+  if(isset($_POST['editar'])){
+    $produto = new Produto(
+      $_POST['id'],
+      $_POST['tipo'],
+      $_POST['nome'],
+      $_POST['descricao'],
+      $_POST['imagem'],
+      $_POST['preco'],
+  );
+  
+    $repository->atualizar(  $produto);
+    header("Location: admin.php");
+  }else{
+    $dado = $repository->buscarApenasUm($_GET['id']);
+  }
+ 
+?>
+
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -24,30 +53,30 @@
     <img class= "ornaments" src="img/ornaments-coffee.png" alt="ornaments">
   </section>
   <section class="container-form">
-    <form action="#">
-
+    <form  method="post">
+    <input type="hidden" name="id" value="<?= $dado->getId()?>">
       <label for="nome">Nome</label>
-      <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required>
+      <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required value="<?= $dado->getNome() ?? null ?>">
 
       <div class="container-radio">
         <div>
             <label for="cafe">Café</label>
-            <input type="radio" id="cafe" name="tipo" value="Café" checked>
+            <input type="radio" id="cafe" name="tipo" value="Café" <?= $dado->getTipo()== 'Café' ?  "checked" : "" ?> >
         </div>
         <div>
             <label for="almoco">Almoço</label>
-            <input type="radio" id="almoco" name="tipo" value="Almoço">
+            <input type="radio" id="almoco" name="tipo" value="Almoço"  <?= $dado->getTipo() == 'Almoço' ?  "checked" : "" ?> >
         </div>
     </div>
 
       <label for="descricao">Descrição</label>
-      <input type="text" id="descricao" name="descricao" placeholder="Digite uma descrição" required>
+      <input type="text" id="descricao" name="descricao" placeholder="Digite uma descrição" required value="<?= $dado->getDescricao() ?? null ?>">
 
       <label for="preco">Preço</label>
-      <input type="text" id="preco" name="preco" placeholder="Digite uma descrição" required>
+      <input type="text" id="preco" name="preco" placeholder="Digite uma descrição" required value="<?= number_format($dado->getPreco(), 2) ?? null ?>">
 
       <label for="imagem">Envie uma imagem do produto</label>
-      <input type="file" name="imagem" accept="image/*" id="imagem" placeholder="Envie uma imagem">
+      <input type="file" name="imagem" accept="image/*" id="imagem" placeholder="Envie uma imagem" value="<?= $dado->getImagem() ?? null ?>">
 
       <input type="submit" name="editar" class="botao-cadastrar"  value="Editar produto"/>
     </form>

@@ -4,14 +4,14 @@
 
 class Produto
 {
-  private int $id;
+  private ?int $id;
   private string $tipo;
   private string $nome;
   private string $descricao;
-  private string $imagem;
+  private ?string $imagem;
   private float $preco;
 
-  public function __construct(int $id, string $tipo, string $nome, string $descricao, string $imagem, float $preco)
+  public function __construct(?int $id, string $tipo, string $nome, string $descricao, ?string $imagem, float $preco)
   {
     $this->id = $id;
     $this->tipo = $tipo;
@@ -52,7 +52,7 @@ class Produto
   }
 
   public function precoFormatted():string{
-    return "R$". number_format($this->preco, 2);
+    return "R$ ". number_format($this->preco, 2);
   }
 
   public function getImagemDiretorio(): string
