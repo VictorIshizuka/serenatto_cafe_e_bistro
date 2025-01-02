@@ -11,14 +11,14 @@ class Produto
   private ?string $imagem;
   private float $preco;
 
-  public function __construct(?int $id, string $tipo, string $nome, string $descricao, ?string $imagem, float $preco)
+  public function __construct(?int $id, string $tipo, string $nome, string $descricao,  float $preco, ?string $imagem)
   {
     $this->id = $id;
     $this->tipo = $tipo;
     $this->nome = $nome;
     $this->descricao = $descricao;
-    $this->imagem = $imagem;
     $this->preco = $preco;
+    $this->imagem = $imagem;
   }
 
   public function getId(): int
@@ -43,9 +43,14 @@ class Produto
   
   public function getImagem(): string
   {
+
       return $this->imagem;
   }
   
+  public function setImagem(string $imagem){
+    $this->imagem = $imagem ?? null;
+  }
+
   public function getPreco(): float
   {
       return $this->preco;

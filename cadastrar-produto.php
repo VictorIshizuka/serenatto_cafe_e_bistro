@@ -13,9 +13,14 @@ if(isset($_POST['cadastro'])){
         $_POST['tipo'],
         $_POST['nome'],
         $_POST['descricao'],
-        $_POST['imagem'],
-        $_POST['preco'],
+                $_POST['preco'],
+                null
     );
+
+    if($_FILES['imagem']['error'] == UPLOAD_ERR_OK){
+            $produto->setImagem(uniqid().$_FILES['imagem']['name']);
+        move_uploaded_file( $_FILES['imagem']['tmp_name'], $produto->getImagemDiretorio() );
+    }
 }
 
 if(isset($produto)){
@@ -53,7 +58,7 @@ if(isset($produto)){
             <img class="ornaments" src="img/ornaments-coffee.png" alt="ornaments">
         </section>
         <section class="container-form">
-            <form action="#" method="post">
+            <form action="#" method="post"enctype="multipart/form-data">
 
                 <label for="nome">Nome</label>
                 <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required>

@@ -29,22 +29,36 @@ class ProdutoRepository
     $stmt->bindValue(2, $produto->getNome());
     $stmt->bindValue(3, $produto->getDescricao());
     $stmt->bindValue(4, $produto->getPreco());
-    $stmt->bindValue(5, $produto->getImagem());
+    $stmt->bindValue(5, $produto->getImagem() );
     $stmt->execute();
   }
 
   public function atualizar(Produto $produto): void
   {
 
-    $sql = "UPDATE produtos SET tipo = ?, nome = ?, descricao = ?, preco = ?, imagem = ? WHERE id = ?";
+    $sql = "UPDATE produtos SET tipo = ?, nome = ?, descricao = ?, preco = ? WHERE id = ?";
     $statement = $this->pdo->prepare($sql);
     $statement->bindValue(1, $produto->getTipo());
     $statement->bindValue(2, $produto->getNome());
     $statement->bindValue(3, $produto->getDescricao());
     $statement->bindValue(4, $produto->getPreco());
-    $statement->bindValue(5, $produto->getImagem());
     $statement->bindValue(6, $produto->getId());
     $statement->execute();
+
+    if($produto->getImagem() !== 'logo-serenatto.png'){
+            
+      $this->atualizarFoto($produto);
+  }
+   
+  }
+
+  private function atualizarFoto(Produto $produto)
+  {
+      $sql = "UPDATE produtos SET imagem = ? WHERE id = ?";
+      $statement = $this->pdo->prepare($sql);
+      $statement->bindValue(1, $produto->getImagem());
+      $statement->bindValue(2, $produto->getId());
+      $statement->execute();
   }
 
   public function buscarApenasUm(int $id): object
@@ -73,8 +87,8 @@ class ProdutoRepository
       $dados['tipo'],
       $dados['nome'],
       $dados['descricao'],
-      $dados['imagem'],
-      $dados['preco']
+      $dados['preco'],
+      $dados['imagem']
     );
   }
   public function opcoesCafe(): array
